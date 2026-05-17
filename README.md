@@ -1,6 +1,6 @@
 # SVG Unblocked Hosting
 
-# https://letrol21.github.io/svg-unblocked-hosting/
+# (https://letrol21.github.io/svg-unblocked-hosting/)[https://letrol21.github.io/svg-unblocked-hosting/]
 
 A client-side web application designed to automatically package, deploy, and host static HTML applications on GitHub via SVG embedding. The application utilizes public CDNs to serve the generated SVG assets, bypassing traditional static file restrictions.
 
