@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Unblocked Hosting</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --panel-bg: rgba(30, 41, 59, 0.7);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-1: #10b981; 
+            --accent-2: #3b82f6;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --glow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--panel-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-top: 0;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--accent-1), var(--accent-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: var(--glow);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        input[type="text"], input[type="password"], textarea {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: monospace;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 180px;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-1);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+        }
+
+        .input-with-button {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-inline {
+            white-space: nowrap;
+            width: auto;
+            padding: 0 16px;
+            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 8px;
+        }
+
+        .btn-inline:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent-2);
+        }
+
+        .input-with-extension {
+            display: flex;
+            align-items: center;
+        }
+
+        .input-with-extension input {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-right: none;
+        }
+
+        .input-with-extension .extension {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-left: none;
+            padding: 14px 20px;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+            color: var(--text-muted);
+            font-weight: bold;
+        }
+
+        .action-buttons {
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            width: 100%;
+            padding: 18px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: white;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn-deploy {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-deploy:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+        }
+
+        .status-log {
+            font-family: monospace;
+            color: var(--accent-1);
+            font-size: 0.95rem;
+            text-align: center;
+            min-height: 24px;
+            margin-top: 10px;
+        }
+
+        .links-panel {
+            margin-top: 30px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            display: none;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .links-panel h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            font-size: 1.2rem;
+            color: var(--accent-1);
+        }
+
+        .link-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        .link-url {
+            flex-grow: 1;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .btn-copy {
+            width: auto;
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            letter-spacing: 0;
+        }
+
+        .btn-copy:hover {
+            background: var(--accent-2);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .form-row { grid-template-columns: 1fr; gap: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>SVG Unblocked Hosting</h1>
+        <div class="subtitle">Deploy directly to GitHub via API</div>
+
+        <div class="form-group">
+            <label for="htmlInput">Paste your HTML here</label>
+            <textarea id="htmlInput" placeholder="<!DOCTYPE html>&#10;<html>&#10;<body>&#10;  <h1>Hello World!</h1>&#10;</body>&#10;</html>"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="fileName">Name your HTML file</label>
+            <div class="input-with-extension">
+                <input type="text" id="fileName" placeholder="index" value="index">
+                <div class="extension">.html</div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="gitRepo">New Repository Name</label>
+                <input type="text" id="gitRepo" placeholder="unblocked-app" value="unblocked-app">
+            </div>
+
+            <div class="form-group">
+                <label for="gitToken">GitHub Personal Access Token</label>
+                <div class="input-with-button">
+                    <input type="password" id="gitToken" placeholder="ghp_xxxxxxxxxxxxxxxxx">
+                    <button class="btn-inline" type="button" onclick="redirectToTokenGenerator()">Generate Token</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn-deploy" id="deployBtn" onclick="createRepoAndDeploy()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                Create Repo & Deploy
+            </button>
+        </div>
+
+        <div id="statusLog" class="status-log"></div>
+
+        <div id="linksPanel" class="links-panel">
+            <h3>Hosted CDN Links</h3>
+            <div id="linksList"></div>
+        </div>
+    </div>
+
+    <script>
+        function logStatus(msg, isError = false) {
+            const logEl = document.getElementById('statusLog');
+            logEl.style.color = isError ? '#ef4444' : 'var(--accent-1)';
+            logEl.innerText = msg;
+        }
+
+        function utoa(data) {
+            return btoa(unescape(encodeURIComponent(data)));
+        }
+
+        function redirectToTokenGenerator() {
+            const repoName = document.getElementById('gitRepo').value.trim() || 'unblocked-app';
+            const description = encodeURIComponent(`${repoName}`);
+            const url = `https://github.com/settings/tokens/new?description=${description}&scopes=repo`;
+            window.open(url, '_blank');
+        }
+
+        function generateSVGString(user, repo, filename) {
+            user = user || '{user_name}';
+            repo = repo || '{repo_name}';
+            filename = filename || 'index';
+
+            const url = `https://raw.githubusercontent.com/${user}/${repo}/refs/heads/main/${filename}.html`;
+
+            return `<svg width="1366" height="768" viewBox="0 0 1366 768" xmlns="http://www.w3.org/2000/svg" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); max-width: 100%; max-height: 100%;">
+    <rect width="100%" height="100%" fill="#f9f9f9" rx="10" />
+    <foreignObject x="20" y="20" width="1326" height="728">
+        <div xmlns="http://www.w3.org/1999/xhtml" style="width: 100%; height: 100%; display: flex; flex-direction: column; font-family: system-ui, sans-serif; box-sizing: border-box;">
+            <button onclick="
+                const newWin = window.open('about:blank', '_blank');
+                fetch('${url}')
+                  .then(response => response.text())
+                  .then(text => {
+                    if (newWin) {
+                      newWin.document.open();
+                      newWin.document.write(text);
+                      newWin.document.close();
+                    }
+                  });" style="flex-grow: 1; width: 100%; font-size: 32px; font-weight: bold; cursor: pointer; border: none; border-radius: 12px; background: linear-gradient(135deg, #10b981, #3b82f6); color: white; transition: 0.2s; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+                Launch Application
+            </button>
+        </div>
+    </foreignObject>
+</svg>`;
+        }
+
+        function displayHostedLinks(user, repo) {
+            const linkTemplates = [
+                `https://cdn.jsdelivr.net/gh/${user}/${repo}@main/clickopen.svg`,
+                `https://esm.sh/gh/${user}/${repo}@main/clickopen.svg?dev`,
+                `https://cdn.statically.io/gh/${user}/${repo}@main/clickopen.svg?v=0`,
+                `https://rawcdn.githack.com/${user}/${repo}/main/clickopen.svg`,
+                `https://raw.githack.com/${user}/${repo}/main/clickopen.svg?t=0`
+            ];
+
+            const listContainer = document.getElementById('linksList');
+            listContainer.innerHTML = ''; 
+
+            linkTemplates.forEach((url, index) => {
+                const row = document.createElement('div');
+                row.className = 'link-row';
+                
+                row.innerHTML = `
+                    <div class="link-url" id="url-${index}">${url}</div>
+                    <button class="btn-copy" onclick="copyToClipboard('url-${index}', this)">Copy</button>
+                `;
+                listContainer.appendChild(row);
+            });
+
+            document.getElementById('linksPanel').style.display = 'block';
+        }
+
+        function copyToClipboard(elementId, btn) {
+            const text = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = "Copied!";
+                btn.style.background = "var(--accent-1)";
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.background = "";
+                }, 2000);
+            });
+        }
+
+        async function createRepoAndDeploy() {
+            const token = document.getElementById('gitToken').value.trim();
+            const repoName = document.getElementById('gitRepo').value.trim();
+            const htmlContent = document.getElementById('htmlInput').value;
+            const filename = document.getElementById('fileName').value.trim() || 'index';
+            const btn = document.getElementById('deployBtn');
+
+            if (!token || !repoName || !htmlContent) {
+                logStatus("Error: Token, Repo Name, and HTML content are required.", true);
+                return;
+            }
+
+            btn.disabled = true;
+            document.getElementById('linksPanel').style.display = 'none'; 
+            let username = "";
+
+            try {
+                logStatus("Authenticating with GitHub...");
+                const userRes = await fetch('https://api.github.com/user', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (!userRes.ok) throw new Error("Invalid GitHub Token");
+                const userData = await userRes.json();
+                username = userData.login;
+
+                logStatus(`Creating repository '${repoName}'...`);
+                const repoRes = await fetch('https://api.github.com/user/repos', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: repoName,
+                        description: "Deployed via SVG Unblocked Hosting",
+                        private: false,
+                        auto_init: true 
+                    })
+                });
+
+                if (!repoRes.ok && repoRes.status !== 422) {
+                    throw new Error("Failed to create repository");
+                }
+
+                logStatus("Preparing files...");
+                await new Promise(resolve => setTimeout(resolve, 2500));
+
+                logStatus(`Uploading ${filename}.html...`);
+                await fetch(`https://api.github.com/repos/${username}/${repoName}/contents/${filename}.html`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `Add ${filename}.html`,
+                        content: utoa(htmlContent)
+                    })
+                });
+
+                logStatus("Uploading clickopen.svg...");
+                const finalSvgContent = generateSVGString(username, repoName, filename);
+                await fetch(`https://api.github.com/repos/${username}/${repoName}/contents/clickopen.svg`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: "Add clickopen.svg",
+                        content: utoa(finalSvgContent)
+                    })
+                });
+
+                logStatus(`Success! Repository created and files uploaded.`);
+                displayHostedLinks(username, repoName);
+                
+                btn.innerHTML = "View on GitHub";
+                btn.onclick = () => window.open(`https://github.com/${username}/${repoName}`, '_blank');
+                btn.disabled = false;
+
+            } catch (error) {
+                logStatus(`Error: ${error.message}`, true);
+                btn.disabled = false;
+                btn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg> Retry Deploy`;
+            }
+        }
+    </script>
+</body>
+</html>
