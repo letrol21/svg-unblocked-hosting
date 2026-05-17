@@ -66,6 +66,51 @@
             font-size: 0.95rem;
         }
 
+        .wizard-container {
+            text-align: center;
+            padding: 10px 0 20px 0;
+            animation: fadeIn 0.4s ease forwards;
+        }
+        
+        .wizard-container h2 {
+            color: var(--text-main);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .wizard-container p {
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+        
+        .wizard-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .wizard-buttons button {
+            width: 120px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: var(--text-main);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .wizard-buttons button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent-2);
+            transform: translateY(-2px);
+        }
+
+        #main-app { display: none; }
+
         .form-group {
             margin-bottom: 24px;
         }
@@ -196,6 +241,20 @@
             box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
         }
 
+        .btn-generate {
+            background: linear-gradient(135deg, var(--accent-2), #8b5cf6);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-generate:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+        }
+
         .btn-download {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--border-color);
@@ -289,57 +348,167 @@
 
     <div class="container">
         <h1>SVG Unblocked Hosting</h1>
-        <div class="subtitle">Deploy directly to GitHub via API</div>
+        <div class="subtitle" id="main-subtitle">Setup Deployment Context</div>
 
-        <div class="form-group">
-            <label for="htmlInput">Paste your HTML here</label>
-            <textarea id="htmlInput" placeholder="<!DOCTYPE html>&#10;<html>&#10;<body>&#10;  <h1>Hello World!</h1>&#10;</body>&#10;</html>"></textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="fileName">Name your HTML file</label>
-            <div class="input-with-extension">
-                <input type="text" id="fileName" placeholder="index" value="index">
-                <div class="extension">.html</div>
+        <div id="step-1" class="wizard-container">
+            <h2>Do you have an existing GitHub repository?</h2>
+            <div class="wizard-buttons">
+                <button onclick="handleQ1(true)">Yes</button>
+                <button onclick="handleQ1(false)">No</button>
             </div>
         </div>
 
-        <div class="form-row">
-            <div class="form-group">
-                <label for="gitRepo">New Repository Name</label>
-                <input type="text" id="gitRepo" placeholder="new-site" value="new-site">
+        <div id="step-2" class="wizard-container" style="display: none;">
+            <h2>Do you have an HTML file in that repo?</h2>
+            <div class="wizard-buttons">
+                <button onclick="handleQ2(true)">Yes</button>
+                <button onclick="handleQ2(false)">No</button>
+            </div>
+        </div>
+
+        <div id="main-app">
+            
+            <div class="form-group" id="group-html">
+                <label for="htmlInput">Paste your HTML here</label>
+                <textarea id="htmlInput" placeholder="<!DOCTYPE html>&#10;<html>&#10;<body>&#10;  <h1>Hello World!</h1>&#10;</body>&#10;</html>"></textarea>
             </div>
 
-            <div class="form-group">
-                <label for="gitToken">GitHub Personal Access Token</label>
-                <div class="input-with-button">
-                    <input type="password" id="gitToken" placeholder="ghp_xxxxxxxxxxxxxxxxx">
-                    <button class="btn-inline" type="button" onclick="redirectToTokenGenerator()">Get Token</button>
+            <div class="form-row">
+                <div class="form-group" id="group-username" style="display:none;">
+                    <label for="gitUsername">GitHub Username</label>
+                    <input type="text" id="gitUsername" placeholder="e.g. octocat">
+                </div>
+
+                <div class="form-group" id="group-repo">
+                    <label for="gitRepo" id="label-repo">New Repository Name</label>
+                    <input type="text" id="gitRepo" placeholder="new-site" value="new-site">
                 </div>
             </div>
-        </div>
 
-        <div class="action-buttons">
-            <button class="btn-deploy" id="deployBtn" onclick="createRepoAndDeploy()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-                Create Repo & Deploy
-            </button>
-            <button class="btn-download" id="downloadBtn" onclick="downloadZip()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                Download Files as ZIP
-            </button>
-        </div>
+            <div class="form-row">
+                <div class="form-group" id="group-filename">
+                    <label for="fileName">Name your HTML file</label>
+                    <div class="input-with-extension">
+                        <input type="text" id="fileName" placeholder="index" value="index">
+                        <div class="extension">.html</div>
+                    </div>
+                </div>
 
-        <div id="statusLog" class="status-log"></div>
+                <div class="form-group" id="group-token">
+                    <label for="gitToken">GitHub Personal Access Token</label>
+                    <div class="input-with-button">
+                        <input type="password" id="gitToken" placeholder="ghp_xxxxxxxxxxxxxxxxx">
+                        <button class="btn-inline" type="button" onclick="redirectToTokenGenerator()">Get Token</button>
+                    </div>
+                </div>
+            </div>
 
-        <div id="linksPanel" class="links-panel">
-            <h3>Hosted CDN Links</h3>
-            <div id="linksList"></div>
+            <div class="action-buttons">
+                <button class="btn-deploy" id="deployBtn" onclick="createRepoAndDeploy()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                    Create Repo & Deploy
+                </button>
+                <button class="btn-generate" id="generateBtn" onclick="generateOnly()" style="display:none;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                    Generate Links & Download SVG
+                </button>
+                <button class="btn-download" id="downloadBtn" onclick="downloadZip()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Download Files as ZIP
+                </button>
+            </div>
+
+            <div id="statusLog" class="status-log"></div>
+
+            <div id="linksPanel" class="links-panel">
+                <h3>Hosted CDN Links</h3>
+                <div id="linksList"></div>
+            </div>
         </div>
     </div>
 
     <script>
         let globalUsername = "";
+        let currentAppMode = "NO_REPO";
+
+
+        function handleQ1(hasRepo) {
+            document.getElementById('step-1').style.display = 'none';
+            if (hasRepo) {
+                document.getElementById('step-2').style.display = 'block';
+            } else {
+                setupUI('NO_REPO');
+            }
+        }
+
+        function handleQ2(hasHtml) {
+            document.getElementById('step-2').style.display = 'none';
+            if (hasHtml) {
+                setupUI('HAS_REPO_HAS_HTML');
+            } else {
+                setupUI('HAS_REPO_NO_HTML');
+            }
+        }
+
+        function setupUI(mode) {
+            currentAppMode = mode;
+            document.getElementById('main-app').style.display = 'block';
+
+            const gHtml = document.getElementById('group-html');
+            const gUser = document.getElementById('group-username');
+            const gRepo = document.getElementById('group-repo');
+            const gFile = document.getElementById('group-filename');
+            const gToken = document.getElementById('group-token');
+
+            const btnDeploy = document.getElementById('deployBtn');
+            const btnGenerate = document.getElementById('generateBtn');
+            const btnDownload = document.getElementById('downloadBtn');
+            const subtitle = document.getElementById('main-subtitle');
+
+            if (mode === 'NO_REPO') {
+                subtitle.innerText = "Deploy a new site directly to GitHub";
+                
+                gUser.style.display = 'none';
+                gHtml.style.display = 'block';
+                gFile.style.display = 'block';
+                gToken.style.display = 'block';
+                
+                document.getElementById('label-repo').innerText = "New Repository Name";
+                
+                btnDeploy.style.display = 'flex';
+                btnGenerate.style.display = 'none';
+                btnDownload.style.display = 'none';
+            }
+            else if (mode === 'HAS_REPO_NO_HTML') {
+                subtitle.innerText = "Prepare files for an existing repository";
+                
+                gUser.style.display = 'block';
+                gHtml.style.display = 'block';
+                gFile.style.display = 'none';
+                gToken.style.display = 'none';
+                
+                document.getElementById('label-repo').innerText = "Existing Repository Name";
+                
+                btnDeploy.style.display = 'none'; 
+                btnGenerate.style.display = 'none';
+                btnDownload.style.display = 'flex';
+            }
+            else if (mode === 'HAS_REPO_HAS_HTML') {
+                subtitle.innerText = "Generate unblocked links for an existing file";
+                
+                gUser.style.display = 'block';
+                gHtml.style.display = 'none';
+                gFile.style.display = 'block';
+                gToken.style.display = 'none';
+                
+                document.getElementById('label-repo').innerText = "Existing Repository Name";
+                
+                btnDeploy.style.display = 'none';
+                btnGenerate.style.display = 'flex';
+                btnDownload.style.display = 'none';
+            }
+        }
+
 
         function logStatus(msg, isError = false) {
             const logEl = document.getElementById('statusLog');
@@ -426,23 +595,59 @@
             });
         }
 
-        async function downloadZip() {
-            const htmlContent = document.getElementById('htmlInput').value;
+        function generateOnly() {
+            const username = document.getElementById('gitUsername').value.trim();
+            const repoName = document.getElementById('gitRepo').value.trim();
             const filename = document.getElementById('fileName').value.trim() || 'index';
-            const repoName = document.getElementById('gitRepo').value.trim() || 'new-site';
 
-            if (!htmlContent) {
-                logStatus("Error: HTML content is empty. Please add code before downloading.", true);
+            if (!username || !repoName) {
+                logStatus("Error: GitHub Username and Repository Name are required.", true);
                 return;
             }
+
+            globalUsername = username;
+            displayHostedLinks(username, repoName);
+            
+            try {
+                const finalSvgContent = generateSVGString(username, repoName, filename);
+                const blob = new Blob([finalSvgContent], { type: 'image/svg+xml' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = 'clickopen.svg';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                logStatus("Links generated and SVG downloaded successfully!");
+            } catch (error) {
+                logStatus(`Error generating SVG: ${error.message}`, true);
+            }
+        }
+
+        async function downloadZip() {
+            const repoName = document.getElementById('gitRepo').value.trim() || 'site-files';
+            
+            let username = globalUsername || '{user_name}';
+            if (currentAppMode !== 'NO_REPO') {
+                username = document.getElementById('gitUsername').value.trim() || '{user_name}';
+            }
+
+            const filename = currentAppMode === 'HAS_REPO_NO_HTML' ? 'index' : (document.getElementById('fileName').value.trim() || 'index');
 
             try {
                 logStatus("Generating ZIP folder...");
                 const zip = new JSZip();
 
-                zip.file(`${filename}.html`, htmlContent);
+                if (currentAppMode !== 'HAS_REPO_HAS_HTML') {
+                    const htmlContent = document.getElementById('htmlInput').value;
+                    if (!htmlContent) {
+                        logStatus("Error: HTML content is empty. Please add code before downloading.", true);
+                        return;
+                    }
+                    zip.file(`${filename}.html`, htmlContent);
+                }
 
-                const finalSvgContent = generateSVGString(globalUsername, repoName, filename);
+                const finalSvgContent = generateSVGString(username, repoName, filename);
                 zip.file("clickopen.svg", finalSvgContent);
 
                 const content = await zip.generateAsync({ type: "blob" });
