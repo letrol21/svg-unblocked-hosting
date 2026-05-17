@@ -305,7 +305,6 @@
 
         <div id="statusLog" class="status-log"></div>
 
-        <!-- Links Panel Container -->
         <div id="linksPanel" class="links-panel">
             <h3>Hosted CDN Links</h3>
             <div id="linksList"></div>
@@ -326,7 +325,6 @@
         function redirectToTokenGenerator() {
             const repoName = document.getElementById('gitRepo').value.trim() || 'unblocked-app';
             const description = encodeURIComponent(`${repoName}`);
-            // 'repo' scope gives full control over private and public repositories required to create them and write contents
             const url = `https://github.com/settings/tokens/new?description=${description}&scopes=repo#:~:text=Generate%20token`;
             window.open(url, '_blank');
         }
