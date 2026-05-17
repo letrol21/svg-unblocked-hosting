@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SVG Unblocked Hosting</title>
+    <title>SVG Unblocked Hosting - Auto Deploy</title>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -305,6 +305,7 @@
 
         <div id="statusLog" class="status-log"></div>
 
+        <!-- Links Panel Container -->
         <div id="linksPanel" class="links-panel">
             <h3>Hosted CDN Links</h3>
             <div id="linksList"></div>
@@ -325,7 +326,8 @@
         function redirectToTokenGenerator() {
             const repoName = document.getElementById('gitRepo').value.trim() || 'unblocked-app';
             const description = encodeURIComponent(`${repoName}`);
-            const url = `https://github.com/settings/tokens/new?description=${description}&scopes=repo`;
+            // 'repo' scope gives full control over private and public repositories required to create them and write contents
+            const url = `https://github.com/settings/tokens/new?description=${description}&scopes=repo#:~:text=Generate%20token`;
             window.open(url, '_blank');
         }
 
@@ -351,7 +353,7 @@
                       newWin.document.close();
                     }
                   });" style="flex-grow: 1; width: 100%; font-size: 32px; font-weight: bold; cursor: pointer; border: none; border-radius: 12px; background: linear-gradient(135deg, #10b981, #3b82f6); color: white; transition: 0.2s; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
-                Launch Application
+                Launch
             </button>
         </div>
     </foreignObject>
