@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SVG Unblocked Hosting</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -154,6 +155,9 @@
         .action-buttons {
             margin-top: 30px;
             margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
         }
 
         button {
@@ -189,6 +193,24 @@
         .btn-deploy:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+        }
+
+        .btn-download {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: var(--text-main);
+        }
+
+        .btn-download:hover:not(:disabled) {
+            transform: translateY(-2px);
+            border-color: var(--accent-2);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.15);
         }
 
         .status-log {
@@ -301,6 +323,10 @@
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                 Create Repo & Deploy
             </button>
+            <button class="btn-download" id="downloadBtn" onclick="downloadZip()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Download Files as ZIP
+            </button>
         </div>
 
         <div id="statusLog" class="status-log"></div>
@@ -312,6 +338,8 @@
     </div>
 
     <script>
+        let globalUsername = "";
+
         function logStatus(msg, isError = false) {
             const logEl = document.getElementById('statusLog');
             logEl.style.color = isError ? '#ef4444' : 'var(--accent-1)';
@@ -397,6 +425,40 @@
             });
         }
 
+        async function downloadZip() {
+            const htmlContent = document.getElementById('htmlInput').value;
+            const filename = document.getElementById('fileName').value.trim() || 'index';
+            const repoName = document.getElementById('gitRepo').value.trim() || 'new-site';
+
+            if (!htmlContent) {
+                logStatus("Error: HTML content is empty. Please add code before downloading.", true);
+                return;
+            }
+
+            try {
+                logStatus("Generating ZIP folder...");
+                const zip = new JSZip();
+
+                zip.file(`${filename}.html`, htmlContent);
+
+                const finalSvgContent = generateSVGString(globalUsername, repoName, filename);
+                zip.file("clickopen.svg", finalSvgContent);
+
+                const content = await zip.generateAsync({ type: "blob" });
+                
+                const link = document.createElement("a");
+                link.href = URL.createObjectURL(content);
+                link.download = `${repoName}-files.zip`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                logStatus("ZIP file downloaded successfully!");
+            } catch (error) {
+                logStatus(`Error building archive: ${error.message}`, true);
+            }
+        }
+
         async function createRepoAndDeploy() {
             const token = document.getElementById('gitToken').value.trim();
             const repoName = document.getElementById('gitRepo').value.trim();
@@ -411,7 +473,6 @@
 
             btn.disabled = true;
             document.getElementById('linksPanel').style.display = 'none'; 
-            let username = "";
 
             try {
                 logStatus("Authenticating with GitHub...");
@@ -421,7 +482,7 @@
                 
                 if (!userRes.ok) throw new Error("Invalid GitHub Token");
                 const userData = await userRes.json();
-                username = userData.login;
+                globalUsername = userData.login; 
 
                 logStatus(`Creating repository '${repoName}'...`);
                 const repoRes = await fetch('https://api.github.com/user/repos', {
@@ -446,7 +507,7 @@
                 await new Promise(resolve => setTimeout(resolve, 2500));
 
                 logStatus(`Uploading ${filename}.html...`);
-                await fetch(`https://api.github.com/repos/${username}/${repoName}/contents/${filename}.html`, {
+                await fetch(`https://api.github.com/repos/${globalUsername}/${repoName}/contents/${filename}.html`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -459,8 +520,8 @@
                 });
 
                 logStatus("Uploading clickopen.svg...");
-                const finalSvgContent = generateSVGString(username, repoName, filename);
-                await fetch(`https://api.github.com/repos/${username}/${repoName}/contents/clickopen.svg`, {
+                const finalSvgContent = generateSVGString(globalUsername, repoName, filename);
+                await fetch(`https://api.github.com/repos/${globalUsername}/${repoName}/contents/clickopen.svg`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -473,10 +534,10 @@
                 });
 
                 logStatus(`Success! Repository created and files uploaded.`);
-                displayHostedLinks(username, repoName);
+                displayHostedLinks(globalUsername, repoName);
                 
                 btn.innerHTML = "View on GitHub";
-                btn.onclick = () => window.open(`https://github.com/${username}/${repoName}`, '_blank');
+                btn.onclick = () => window.open(`https://github.com/${globalUsername}/${repoName}`, '_blank');
                 btn.disabled = false;
 
             } catch (error) {
